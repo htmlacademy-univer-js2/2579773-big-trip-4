@@ -7,10 +7,17 @@
     "lint": "eslint src/"
   },
   "devDependencies": {
+    "copy-webpack-plugin": "11.0.0",
     "eslint": "8.38.0",
-    "eslint-config-htmlacademy": "9.0.0"
+    "eslint-config-htmlacademy": "9.0.0",
+    "webpack": "5.79.0",
+    "webpack-cli": "5.0.1"
   },
   "engines": {
     "node": "18"
+  },
+  "dependencies": {
+    "dayjs": "1.11.7",
+    "he": "1.2.0"
   }
 }
