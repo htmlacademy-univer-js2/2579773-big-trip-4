@@ -1,8 +1,7 @@
-import {destinations} from '../mock/destination.js';
-
-export default class DisstinationModel {
-  constructor() {
-    this.destinations = destinations;
+export default class DistinationModel {
+  constructor(service) {
+    this.service = service;
+    this.destinations = this.service.getDestinations();
   }
 
   get() {

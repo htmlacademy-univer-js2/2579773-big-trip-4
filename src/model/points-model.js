@@ -1,8 +1,7 @@
-import {points} from '../mock/point.js';
-
 export default class PointModel {
-  constructor() {
-    this.points = points;
+  constructor(service) {
+    this.service = service;
+    this.points = this.service.getPoints();
   }
 
   get() {
