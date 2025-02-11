@@ -13,7 +13,7 @@ function formatStringToTime(date) {
 }
 
 function formatStringToDateTimeWithLine(date) {
-  return dayjs(date, 'DD/MM/YY HH:mm').format('YYYY-MM-DDTHH:mm');
+  return dayjs(date).format('DD/MM/YY HH:mm');
 }
 
 export {formatStringToDateTime, formatStringToShortDate, formatStringToTime, formatStringToDateTimeWithLine};
