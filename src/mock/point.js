@@ -1,5 +1,18 @@
 import { destinations } from '..mock/destination.js';
-import { offers } from '..mock/offer.js';
+import { options } from '..mock/offer.js';
+
+const getOffersByType = (type) => {
+  const offersArray = options.find((offer) => offer.type === type);
+  if (!offersArray) {
+    return [];
+  }
+
+  const offerIds = [];
+  for (let i = 0; i < offersArray.offers.length; i++) {
+    offerIds.push(offersArray.offers[i].id);
+  }
+  return offerIds;
+};
 
 const points = [
   {
@@ -9,8 +22,8 @@ const points = [
     dateTo: '2024-03-01T10:30:00.000Z',
     destination: destinations[0].id,
     isFavorite: false,
-    offers: [offers[0].id, offers[2].id],
-    type: 'taxi'
+    offers: getOffersByType('Taxi'),
+    type: 'Taxi'
   },
   {
     id: crypto.randomUUID(),
@@ -19,8 +32,8 @@ const points = [
     dateTo: '2024-03-01T14:50:40.000Z',
     destination: destinations[0].id,
     isFavorite: true,
-    offers: [],
-    type: 'sightseeing'
+    offers: getOffersByType('Sightseeing'),
+    type: 'Sightseeing'
   },
   {
     id: crypto.randomUUID(),
@@ -29,8 +42,8 @@ const points = [
     dateTo: '2024-03-10T14:30:45.456Z',
     destination: destinations[1].id,
     isFavorite: true,
-    offers: [offers[3].id],
-    type: 'flight'
+    offers: getOffersByType('Flight'),
+    type: 'Flight'
   },
   {
     id: crypto.randomUUID(),
@@ -39,8 +52,8 @@ const points = [
     dateTo: '2024-04-01T15:45:22.567Z',
     destination: destinations[2].id,
     isFavorite: false,
-    offers: [offers[4].id],
-    type: 'train'
+    offers: getOffersByType('Train'),
+    type: 'Train'
   },
   {
     id: crypto.randomUUID(),
@@ -49,8 +62,8 @@ const points = [
     dateTo: '2024-04-01T16:45:22.567Z',
     destination: destinations[2].id,
     isFavorite: false,
-    offers: [],
-    type: 'restaurant'
+    offers: getOffersByType('Restaurant'),
+    type: 'Restaurant'
   },
   {
     id: crypto.randomUUID(),
@@ -59,8 +72,8 @@ const points = [
     dateTo: '2024-04-15T20:00:30.456Z',
     destination: destinations[3].id,
     isFavorite: true,
-    offers: [offers[0].id],
-    type: 'ship'
+    offers: getOffersByType('Ship'),
+    type: 'Ship'
   },
   {
     id: crypto.randomUUID(),
@@ -69,8 +82,8 @@ const points = [
     dateTo: '2024-04-02T10:00:22.567Z',
     destination: destinations[3].id,
     isFavorite: false,
-    offers: [],
-    type: 'check-in'
+    offers: getOffersByType('Check-in'),
+    type: 'Check-in'
   },
 
 ];
