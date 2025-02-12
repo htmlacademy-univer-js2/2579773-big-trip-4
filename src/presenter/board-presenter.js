@@ -3,7 +3,7 @@ import SortView from '../view/sort-view.js';
 import EventListView from '../view/event-list-view.js';
 import PointView from '../view/point-view.js';
 
-import {render} from '../render.js';
+import {render} from '../framework/render.js';
 
 export default class BoardPresenter {
   sortComponent = new SortView();
@@ -26,7 +26,7 @@ export default class BoardPresenter {
       new PointCreateView({
         point: this.points[0],
       }),
-      this.eventListComponent.getElement()
+      this.eventListComponent.element()
     );
 
     this.points.forEach((point) => {
@@ -35,7 +35,7 @@ export default class BoardPresenter {
         this.destinationModel.getByID(point.destination.id),
         this.offerModel.getByType(point.type) || []
       ),
-      this.eventListComponent.getElement());
+      this.eventListComponent.element());
     });
   }
 }

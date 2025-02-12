@@ -1,6 +1,6 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import {formatStringToDateTimeWithLine} from '../util.js';
-import { destinations } from '../mock/destination.js';
+import {destinations} from '../mock/destination.js';
 
 const POINT_EMPTY = {
   basePrice: 0,
@@ -120,25 +120,17 @@ function createPointCreateTemplate({point}) {
   `;
 }
 
-export default class PointCreateView {
+export default class PointCreateView extends AbstractView {
+  #point = null;
+
   constructor({point = POINT_EMPTY}) {
-    this.point = point;
+    super();
+    this.#point = point;
   }
 
-  getTemplate() {
+  get template() {
     return createPointCreateTemplate({
-      point: this.point,
+      point: this.#point,
     });
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }
