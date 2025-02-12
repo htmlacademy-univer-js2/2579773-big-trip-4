@@ -21,13 +21,4 @@ export default class MockService {
   getPoints() {
     return this.points;
   }
-
-  getPointsFull() {
-    return this.points.map((point) => {
-      const destination = this.destinations.find((dest) => dest.id === point.destination);
-      const offers = this.offers.find((offer) => offer.type === point.type)?.offer || [];
-
-      return {...point, destination, offers};
-    });
-  }
 }

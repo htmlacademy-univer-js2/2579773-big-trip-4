@@ -9,7 +9,7 @@ const POINT_EMPTY = {
   destination: null,
   isFavorite: false,
   offers: [],
-  type: 'flight'
+  type: 'Flight'
 };
 
 function createPointCreateTemplate({point}) {

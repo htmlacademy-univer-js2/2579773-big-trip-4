@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 function createPointTemplate({point, pointDestination, pointOffers}) {
   const { basePrice, dateFrom, dateTo, isFavorite, type } = point;
 
-  const offerItems = pointOffers && pointOffers.length > 0 ?
+  const offerItems = pointOffers?.length > 0 ?
     pointOffers.map((offer) => `
     <li class="event__offer">
       <span class="event__offer-title">${offer.title}</span>
