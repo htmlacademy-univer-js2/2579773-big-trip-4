@@ -4,7 +4,7 @@ import BoardPresenter from './presenter/board-presenter.js';
 import {render, RenderPosition} from './framework/render.js';
 
 import PointModel from './model/points-model.js';
-import DestinationModel from './model/distinations-model.js';
+import DestinationModel from './model/destinations-model.js';
 import OfferModel from './model/offers-model.js';
 import MockService from './service/mock-service.js';
 
