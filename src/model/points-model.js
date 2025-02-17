@@ -8,6 +8,6 @@ export default class PointModel {
   }
 
   get() {
-    return this.#points;
+    return this.#points || [];
   }
 }
