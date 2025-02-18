@@ -2,8 +2,8 @@ import AbstractView from '../framework/view/abstract-view.js';
 import {formatStringToDateTimeWithLine} from '../util.js';
 import {destinations} from '../mock/destination.js';
 
-function createPointEditTemplate({point}) {
-  const { basePrice, dateFrom, dateTo, destination, isFavorite, type, offers } = point;
+function createPointEditTemplate({point, offers}) {
+  const { basePrice, dateFrom, dateTo, destination, isFavorite, type } = point;
 
   const eventTypes = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
   const eventTypeOptions = eventTypes.map((eventType) => {
@@ -16,8 +16,8 @@ function createPointEditTemplate({point}) {
     `;
   }).join('');
 
-  const offerSelectors = point.offers.map((offer) => {
-    const isChecked = offers.includes(offer.id) ? 'checked' : '';
+  const offerSelectors = offers.map((offer) => {
+    const isChecked = point.offers.some((offerItem) => offerItem.id === offer.id) ? 'checked' : '';
     return `
       <div class="event__offer-selector">
         <input class="event__offer-checkbox visually-hidden" id="event-offer-${offer.type}-${offer.id}" type="checkbox" name="event-offer-${offer.type}" ${isChecked}>
@@ -105,10 +105,12 @@ export default class PointEditView extends AbstractView {
   #onResetClick = null;
   #onSubmitClick = null;
   #onDeleteClick = null;
+  #offers = null;
 
-  constructor({point, onResetClick, onSubmitClick, onDeleteClick}) {
+  constructor({point, offers, onResetClick, onSubmitClick, onDeleteClick}) {
     super();
     this.#point = point;
+    this.#offers = offers;
     this.#onResetClick = onResetClick;
     this.#onSubmitClick = onSubmitClick;
     this.#onDeleteClick = onDeleteClick;
@@ -121,6 +123,7 @@ export default class PointEditView extends AbstractView {
   get template() {
     return createPointEditTemplate({
       point: this.#point,
+      offers: this.#offers,
     });
   }
 

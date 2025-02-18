@@ -9,7 +9,7 @@ const points = [
     dateTo: '2024-03-01T10:30:00.000Z',
     destination: destinations[0],
     isFavorite: false,
-    offers: [options[0].offers[0], options[0].offers[2]],
+    offers: [options[2].offers[0]],
     type: 'Taxi'
   },
   {
