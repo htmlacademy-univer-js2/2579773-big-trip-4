@@ -41,7 +41,12 @@ const options = [
         id: crypto.randomUUID(),
         title: 'Order Uber',
         price: 20
-      }
+      },
+      {
+        id: crypto.randomUUID(),
+        title: 'Order Uber business',
+        price: 50
+      },
     ]
   }
 ];
