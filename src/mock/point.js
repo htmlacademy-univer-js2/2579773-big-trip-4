@@ -55,8 +55,8 @@ const points = [
   {
     id: crypto.randomUUID(),
     basePrice: 1000,
-    dateFrom: '2024-04-15T18:10:45.123Z',
-    dateTo: '2024-04-15T20:00:30.456Z',
+    dateFrom: '2025-02-19T18:10:45.123Z',
+    dateTo: '2025-02-19T20:00:30.456Z',
     destination: destinations[3],
     isFavorite: true,
     offers: [],
@@ -65,14 +65,13 @@ const points = [
   {
     id: crypto.randomUUID(),
     basePrice: 1100,
-    dateFrom: '2024-04-02T09:00:10.789Z',
-    dateTo: '2024-04-02T10:00:22.567Z',
+    dateFrom: '2025-04-02T09:00:10.789Z',
+    dateTo: '2025-04-02T10:00:22.567Z',
     destination: destinations[3],
     isFavorite: false,
     offers: [],
     type: 'Check-in'
   },
-
 ];
 
 export {points};
