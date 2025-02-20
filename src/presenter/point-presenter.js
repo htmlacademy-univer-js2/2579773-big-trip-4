@@ -1,0 +1,78 @@
+import PointView from '../view/point-view.js';
+import PointEditView from '../view/point-edit-view.js';
+
+import {render, replace} from '../framework/render.js';
+
+export default class PointPresenter {
+  #destinationModel = null;
+  #offerModel = null;
+  #pointListContainer = null;
+  #pointComponent = null;
+  #pointEditComponent = null;
+  #point = null;
+
+  constructor({pointListContainer, destinationModel, offerModel}) {
+    this.#pointListContainer = pointListContainer;
+    this.#destinationModel = destinationModel;
+    this.#offerModel = offerModel;
+  }
+
+  init(point) {
+    this.#point = point;
+
+    this.#pointComponent = new PointView(
+      point,
+      this.#destinationModel.getByID(point.destination.id),
+      point.offers || [] ,
+      this.#pointEditClickHandle
+    );
+
+    this.#pointEditComponent = new PointEditView ({
+      point,
+      offers: this.#offerModel.getByType(point.type) || [],
+      onResetClick: this.#resetClickHandler,
+      onSubmitClick: this.#submitClickHandler,
+      onDeleteClick: this.#deleteClickHandler
+    });
+
+    render(this.#pointComponent, this.#pointListContainer.element);
+  }
+
+  #replacePointToForm = () => {
+    replace(this.#pointEditComponent, this.#pointComponent);
+  };
+
+  #replaceFormToPoint = () => {
+    replace(this.#pointComponent, this.#pointEditComponent);
+  };
+
+  #escKeyHandler = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc'){
+      evt.preventDefault();
+      this.#replaceFormToPoint();
+      document.removeEventListener('keydown', this.#escKeyHandler);
+    }
+  };
+
+  #pointEditClickHandle = () => {
+    this.#replacePointToForm();
+    document.addEventListener('keydown', this.#escKeyHandler);
+  };
+
+  #resetClickHandler = () => {
+    this.#replaceFormToPoint();
+    document.removeEventListener('keydown', this.#escKeyHandler);
+  };
+
+  #submitClickHandler = () => {
+    this.#replaceFormToPoint();
+    document.removeEventListener('keydown', this.#escKeyHandler);
+  };
+
+  #deleteClickHandler = () => {
+    this.#pointComponent.element.remove();
+    this.#pointEditComponent.element.remove();
+    document.removeEventListener('keydown', this.#escKeyHandler);
+  };
+}
+
