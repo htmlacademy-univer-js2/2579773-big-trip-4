@@ -16,4 +16,8 @@ function formatStringToDateTimeWithLine(date) {
   return dayjs(date).format('DD/MM/YY HH:mm');
 }
 
-export {formatStringToDateTime, formatStringToShortDate, formatStringToTime, formatStringToDateTimeWithLine};
+function updateItem(items, update) {
+  return items.map((item) => item.id === update.id ? update : item);
+}
+
+export {formatStringToDateTime, formatStringToShortDate, formatStringToTime, formatStringToDateTimeWithLine, updateItem};

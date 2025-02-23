@@ -10,11 +10,13 @@ export default class PointPresenter {
   #pointComponent = null;
   #pointEditComponent = null;
   #point = null;
+  #handleDataChange = null;
 
-  constructor({pointListContainer, destinationModel, offerModel}) {
+  constructor({pointListContainer, destinationModel, offerModel, onDataChange}) {
     this.#pointListContainer = pointListContainer;
     this.#destinationModel = destinationModel;
     this.#offerModel = offerModel;
+    this.#handleDataChange = onDataChange;
   }
 
   init(point) {
@@ -23,19 +25,21 @@ export default class PointPresenter {
     const prevPointComponent = this.#pointComponent;
     const prevPointEditComponent = this.#pointEditComponent;
 
-    this.#pointComponent = new PointView(
-      point,
-      this.#destinationModel.getByID(point.destination.id),
-      point.offers || [] ,
-      this.#pointEditClickHandle
-    );
+    this.#pointComponent = new PointView({
+      point: this.#point,
+      pointDestination: this.#destinationModel.getByID(point.destination.id),
+      pointOffers: point.offers || [],
+      onEditClick: this.#pointEditClickHandler,
+      onFavoriteClick: this.#favoriteClickHandler,
+    });
 
     this.#pointEditComponent = new PointEditView ({
       point,
       offers: this.#offerModel.getByType(point.type) || [],
       onResetClick: this.#resetClickHandler,
       onSubmitClick: this.#submitClickHandler,
-      onDeleteClick: this.#deleteClickHandler
+      onDeleteClick: this.#deleteClickHandler,
+      onFavoriteClick: this.#favoriteClickHandler,
     });
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
@@ -76,7 +80,7 @@ export default class PointPresenter {
     }
   };
 
-  #pointEditClickHandle = () => {
+  #pointEditClickHandler = () => {
     this.#replacePointToForm();
     document.addEventListener('keydown', this.#escKeyHandler);
   };
@@ -86,15 +90,20 @@ export default class PointPresenter {
     document.removeEventListener('keydown', this.#escKeyHandler);
   };
 
-  #submitClickHandler = () => {
+  #submitClickHandler = (point) => {
     this.#replaceFormToPoint();
     document.removeEventListener('keydown', this.#escKeyHandler);
+    this.#handleDataChange(point);
   };
 
   #deleteClickHandler = () => {
     this.#pointComponent.element.remove();
     this.#pointEditComponent.element.remove();
     document.removeEventListener('keydown', this.#escKeyHandler);
+  };
+
+  #favoriteClickHandler = () => {
+    this.#handleDataChange({...this.#point, isFavorite: !this.#point.isFavorite});
   };
 }
 
