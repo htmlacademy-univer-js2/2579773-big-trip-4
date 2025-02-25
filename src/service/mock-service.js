@@ -22,6 +22,6 @@ export default class MockService {
   }
 
   getPoints() {
-    return this.#points;
+    return this.#points || [];
   }
 }

@@ -20,4 +20,16 @@ function updateItem(items, update) {
   return items.map((item) => item.id === update.id ? update : item);
 }
 
-export {formatStringToDateTime, formatStringToShortDate, formatStringToTime, formatStringToDateTimeWithLine, updateItem};
+function isPointPresent(point) {
+  return dayjs().isAfter(dayjs(point.dateFrom)) && dayjs().isBefore(dayjs(point.dateTo));
+}
+
+function isPointFuture(point) {
+  return dayjs().isBefore(dayjs(point.dateFrom));
+}
+
+function isPointPast(point) {
+  return dayjs().isAfter(dayjs(point.dateTo));
+}
+
+export {formatStringToDateTime, formatStringToShortDate, formatStringToTime, formatStringToDateTimeWithLine, isPointFuture, isPointPast, isPointPresent, updateItem};
