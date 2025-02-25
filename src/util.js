@@ -16,6 +16,10 @@ function formatStringToDateTimeWithLine(date) {
   return dayjs(date).format('DD/MM/YY HH:mm');
 }
 
+function updateItem(items, update) {
+  return items.map((item) => item.id === update.id ? update : item);
+}
+
 function isPointPresent(point) {
   return dayjs().isAfter(dayjs(point.dateFrom)) && dayjs().isBefore(dayjs(point.dateTo));
 }
@@ -28,4 +32,4 @@ function isPointPast(point) {
   return dayjs().isAfter(dayjs(point.dateTo));
 }
 
-export {formatStringToDateTime, formatStringToShortDate, formatStringToTime, formatStringToDateTimeWithLine, isPointFuture, isPointPast, isPointPresent};
+export {formatStringToDateTime, formatStringToShortDate, formatStringToTime, formatStringToDateTimeWithLine, isPointFuture, isPointPast, isPointPresent, updateItem};
