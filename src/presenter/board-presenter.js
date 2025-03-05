@@ -1,11 +1,10 @@
-// import PointCreateView from '../view/point-create-view.js';
 import SortView from '../view/sort-view.js';
 import EventListView from '../view/event-list-view.js';
 import EventListViewEmpty from '../view/event-list-view-empty.js';
 import PointPresenter from './point-presenter.js';
 
 import {render} from '../framework/render.js';
-import { updateItem } from '../util.js';
+import {updateItem} from '../util.js';
 
 export default class BoardPresenter {
   #container = null;
