@@ -43,8 +43,8 @@ export default class PointPresenter {
     });
 
     this.#pointEditComponent = new PointEditView ({
-      point,
-      offers: this.#offerModel.getByType(point.type) || [],
+      point: this.#point,
+      offers: this.#offerModel.get() || [],
       onResetClick: this.#resetClickHandler,
       onSubmitClick: this.#submitClickHandler,
       onDeleteClick: this.#deleteClickHandler,
@@ -75,6 +75,7 @@ export default class PointPresenter {
 
   resetView() {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToPoint();
     }
   }
@@ -86,13 +87,23 @@ export default class PointPresenter {
   };
 
   #replaceFormToPoint = () => {
-    replace(this.#pointComponent, this.#pointEditComponent);
+    const updatedPointComponent = new PointView({
+      point: this.#point,
+      pointDestination: this.#destinationModel.getByID(this.#point.destination.id),
+      pointOffers: this.#point.offers || [],
+      onEditClick: this.#pointEditClickHandler,
+      onFavoriteClick: this.#favoriteClickHandler,
+    });
+
+    replace(updatedPointComponent, this.#pointEditComponent);
+    this.#pointComponent = updatedPointComponent;
     this.#mode = Mode.DEFAULT;
   };
 
   #escKeyHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc'){
       evt.preventDefault();
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToPoint();
       document.removeEventListener('keydown', this.#escKeyHandler);
     }
@@ -104,6 +115,7 @@ export default class PointPresenter {
   };
 
   #resetClickHandler = () => {
+    this.#pointEditComponent.reset(this.#point);
     this.#replaceFormToPoint();
     document.removeEventListener('keydown', this.#escKeyHandler);
   };
