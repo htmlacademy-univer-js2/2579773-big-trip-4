@@ -1,9 +1,8 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {formatStringToDateTimeWithLine} from '../util.js';
-import {destinations} from '../mock/destination.js';
 
 function createPointEditTemplate({state}) {
-  const {point} = state;
+  const {point, destinations} = state;
   const { basePrice, dateFrom, dateTo, destination, isFavorite, type } = point;
 
   const eventTypes = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
@@ -114,10 +113,12 @@ export default class PointEditView extends AbstractStatefulView {
   #onResetClick = null;
   #onSubmitClick = null;
   #onDeleteClick = null;
+  #destinations = null;
 
-  constructor({point, offers, onResetClick, onSubmitClick, onDeleteClick}) {
+  constructor({point, offers, destinations, onResetClick, onSubmitClick, onDeleteClick}) {
     super();
     this._setState(PointEditView.parsePointToState({point, offers}));
+    this.#destinations = destinations;
     this.#onResetClick = onResetClick;
     this.#onSubmitClick = onSubmitClick;
     this.#onDeleteClick = onDeleteClick;
@@ -127,7 +128,10 @@ export default class PointEditView extends AbstractStatefulView {
 
   get template() {
     return createPointEditTemplate({
-      state: this._state,
+      state: {
+        ...this._state,
+        destinations: this.#destinations
+      },
     });
   }
 
@@ -176,7 +180,7 @@ export default class PointEditView extends AbstractStatefulView {
     this.updateElement({
       point: {
         ...this._state.point,
-        destination: destinations.find((dest) => dest.name === evt.target.value)
+        destination: this.#destinations.find((dest) => dest.name === evt.target.value)
       },
     });
   };
