@@ -1,6 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {formatStringToDateTimeWithLine} from '../util.js';
-import {destinations} from '../mock/destination.js';
 
 const POINT_EMPTY = {
   basePrice: 0,
@@ -12,7 +11,7 @@ const POINT_EMPTY = {
   type: 'Flight'
 };
 
-function createPointCreateTemplate({point}) {
+function createPointCreateTemplate({point, destinations}) {
   const { basePrice, dateFrom, dateTo, destination, type, offers } = point;
 
   const eventTypes = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
@@ -122,15 +121,18 @@ function createPointCreateTemplate({point}) {
 
 export default class PointCreateView extends AbstractView {
   #point = null;
+  #destinations = null;
 
-  constructor({point = POINT_EMPTY}) {
+  constructor({point = POINT_EMPTY, destinations}) {
     super();
     this.#point = point;
+    this.#destinations = destinations;
   }
 
   get template() {
     return createPointCreateTemplate({
       point: this.#point,
+      destinations : this.#destinations
     });
   }
 }
