@@ -11,8 +11,8 @@ const POINT_EMPTY = {
   type: 'Flight'
 };
 
-function createPointCreateTemplate({point, destinations}) {
-  const { basePrice, dateFrom, dateTo, destination, type, offers } = point;
+function createPointCreateTemplate({point, offers, destinations}) {
+  const {basePrice, dateFrom, dateTo, destination, type} = point;
 
   const eventTypes = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
   const eventTypeOptions = eventTypes.map((eventType) => {
@@ -122,16 +122,19 @@ function createPointCreateTemplate({point, destinations}) {
 export default class PointCreateView extends AbstractView {
   #point = null;
   #destinations = null;
+  #offers = null;
 
-  constructor({point = POINT_EMPTY, destinations}) {
+  constructor({point = POINT_EMPTY, destinations, offers}) {
     super();
     this.#point = point;
+    this.#offers = offers;
     this.#destinations = destinations;
   }
 
   get template() {
     return createPointCreateTemplate({
       point: this.#point,
+      offers: this.#offers,
       destinations : this.#destinations
     });
   }
