@@ -184,7 +184,7 @@ export default class PointEditView extends AbstractStatefulView {
   #offersHandler = () => {
     const checkedBoxes = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
     const selectedOfferId = checkedBoxes.map((element) => (element.dataset.offerId));
-    const availableOffers = this._state.offers.find((offer) => offer.type.toLowerCase() === this._state.point.type)?.offers || [];
+    const availableOffers = this._state.offers.find((offer) => offer.type.toLowerCase() === this._state.point.type.toLowerCase())?.offers || [];
     const selectedOffers = availableOffers.filter((offer) => selectedOfferId.includes(offer.id));
 
     this._setState({
