@@ -5,29 +5,37 @@ import PointPresenter from './point-presenter.js';
 
 import {render} from '../framework/render.js';
 import {UpdateType, UserAction} from '../const.js';
+import {filter} from '../const.js';
 
 export default class BoardPresenter {
   #container = null;
   #pointModel = null;
   #destinationModel = null;
   #offerModel = null;
+  #filterModel = null;
 
   #sortComponent = new SortView();
   #eventListComponent = new EventListView();
 
   #pointPresenters = new Map();
 
-  constructor({container, pointModel, destinationModel, offerModel}) {
+  constructor({container, pointModel, destinationModel, offerModel, filterModel}) {
     this.#container = container;
     this.#pointModel = pointModel;
     this.#destinationModel = destinationModel;
     this.#offerModel = offerModel;
+    this.#filterModel = filterModel;
 
     this.#pointModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {
-    return this.#pointModel.points;
+    const filterType = this.#filterModel.filter;
+    const points = this.#pointModel.points;
+    const filteredPoints = filter[filterType](points);
+
+    return filteredPoints;
   }
 
   init() {

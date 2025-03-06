@@ -30,4 +30,4 @@ const UpdateType = {
   MINOR: 'MINOR',
 };
 
-export{filter, UpdateType, UserAction, Mode};
+export{filter, UpdateType, UserAction, Mode, FilterType};
