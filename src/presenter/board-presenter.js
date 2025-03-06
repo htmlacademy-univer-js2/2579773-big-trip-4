@@ -4,14 +4,13 @@ import EventListViewEmpty from '../view/event-list-view-empty.js';
 import PointPresenter from './point-presenter.js';
 
 import {render} from '../framework/render.js';
-import {updateItem} from '../util.js';
+import {UpdateType, UserAction} from '../const.js';
 
 export default class BoardPresenter {
   #container = null;
   #pointModel = null;
   #destinationModel = null;
   #offerModel = null;
-  #points = [];
 
   #sortComponent = new SortView();
   #eventListComponent = new EventListView();
@@ -24,7 +23,11 @@ export default class BoardPresenter {
     this.#destinationModel = destinationModel;
     this.#offerModel = offerModel;
 
-    this.#points = [...this.#pointModel.get()];
+    this.#pointModel.addObserver(this.#handleModelEvent);
+  }
+
+  get points() {
+    return this.#pointModel.points;
   }
 
   init() {
@@ -32,7 +35,7 @@ export default class BoardPresenter {
   }
 
   #renderBoard() {
-    if (this.#points.length === 0) {
+    if (this.points.length === 0) {
       render(new EventListViewEmpty(), this.#container);
       return;
     }
@@ -55,7 +58,7 @@ export default class BoardPresenter {
       pointListContainer: this.#eventListComponent.element,
       destinationModel: this.#destinationModel,
       offerModel: this.#offerModel,
-      onDataChange: this.#handlePointChange,
+      onDataChange: this.#handelViewAction,
       onModeChange: this.#handleModeChange
     });
 
@@ -64,7 +67,7 @@ export default class BoardPresenter {
   };
 
   #renderPoints = () => {
-    this.#points.forEach((point) => {
+    this.points.forEach((point) => {
       this.#renderPoint(point);
     });
   };
@@ -74,9 +77,29 @@ export default class BoardPresenter {
     this.#pointPresenters.clear();
   };
 
-  #handlePointChange = (updatedPoint) => {
-    this.#points = updateItem(this.#points, updatedPoint);
-    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
+  #handelViewAction = (actionType, updateType, update) => {
+    switch (actionType) {
+      case UserAction.UPDATE_POINT:
+        this.#pointModel.updatePoint(updateType, update);
+        break;
+      case UserAction.ADD_POINT:
+        this.#pointModel.addPoint(updateType, update);
+        break;
+      case UserAction.DELETE_POINT:
+        this.#pointModel.deletePoint(updateType, update);
+        break;
+    }
+  };
+
+  #handleModelEvent = (updateType, data) => {
+    switch (updateType) {
+      case UpdateType.MINOR:
+        this.#clearPoints();
+        this.#renderBoard();
+        break;
+      case UpdateType.PATCH:
+        this.#pointPresenters.get(data.id).init(data);
+    }
   };
 
   #handleModeChange = () => {

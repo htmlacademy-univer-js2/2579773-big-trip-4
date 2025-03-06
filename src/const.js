@@ -14,4 +14,20 @@ const filter = {
   [FilterType.PAST]: (points) => points.filter((point) => isPointPast(point))
 };
 
-export{filter};
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
+
+const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT'
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+};
+
+export{filter, UpdateType, UserAction, Mode};

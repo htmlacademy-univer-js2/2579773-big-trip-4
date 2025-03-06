@@ -185,7 +185,7 @@ export default class PointEditView extends AbstractStatefulView {
 
   #deleteHandler = (evt) => {
     evt.preventDefault();
-    this.#onDeleteClick();
+    this.#onDeleteClick(PointEditView.parseStateToPoint(this._state));
   };
 
   #eventTypeHandler = (evt) => {

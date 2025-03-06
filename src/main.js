@@ -29,7 +29,7 @@ const boardPresenter = new BoardPresenter ({
   offerModel
 });
 
-const filters = generateFilter(pointModel.get());
+const filters = generateFilter(pointModel.points);
 
 render(new TripInfoView(), tripInfoElement, RenderPosition.AFTERBEGIN);
 render(new FilterView({filters}), filterElement);
