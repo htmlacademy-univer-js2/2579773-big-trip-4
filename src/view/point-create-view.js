@@ -76,7 +76,7 @@ function createPointCreateTemplate({state}) {
             <label class="event__label" for="event-price-1">
               &euro;
             </label>
-            <input class="event__input event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice || ''}">
+            <input class="event__input event__input--price" id="event-price-1" type="number" name="event-price" value="${basePrice || ''}">
           </div>
           <button class="event__save-btn btn btn--blue" type="submit">Save</button>
           <button class="event__reset-btn" type="reset">Cancel</button>
@@ -160,7 +160,20 @@ export default class PointCreateView extends AbstractStatefulView {
     this.element.querySelector('.event__available-offers').addEventListener('change', this.#offersHandler);
     this.element.querySelector('.event__input--price').addEventListener('change', this.#priceHandler);
     this.#setDatepickers();
+    this.#checkDestination();
   }
+
+  #checkDestination = () => {
+    const destinationValue = this.element.querySelector('.event__input--destination').value;
+    const validDestination = this.#destinations.find((dest) => dest.name.toLowerCase() === destinationValue.toLowerCase());
+    const saveButton = this.element.querySelector('.event__save-btn');
+
+    if (validDestination) {
+      saveButton.disabled = false;
+    } else {
+      saveButton.disabled = true;
+    }
+  };
 
   #submitHandler = (evt) => {
     evt.preventDefault();
@@ -183,12 +196,21 @@ export default class PointCreateView extends AbstractStatefulView {
   };
 
   #eventDestinationHandler = (evt) => {
-    this.updateElement({
-      point: {
-        ...this._state.point,
-        destination: this.#destinations.find((dest) => dest.name === evt.target.value)
-      },
-    });
+    const destinationValue = evt.target.value;
+    const validDestination = this.#destinations.find((dest) => dest.name.toLowerCase() === destinationValue.toLowerCase());
+    const saveButton = this.element.querySelector('.event__save-btn');
+
+    if (validDestination) {
+      this.updateElement({
+        point: {
+          ...this._state.point,
+          destination: validDestination
+        },
+      });
+      saveButton.disabled = false;
+    } else {
+      saveButton.disabled = true;
+    }
   };
 
   #offersHandler = () => {
