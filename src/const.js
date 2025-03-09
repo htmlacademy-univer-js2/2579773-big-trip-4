@@ -30,4 +30,14 @@ const UpdateType = {
   MINOR: 'MINOR',
 };
 
-export{filter, UpdateType, UserAction, Mode, FilterType};
+const POINT_EMPTY = {
+  basePrice: 0,
+  dateFrom: new Date(),
+  dateTo:  new Date(new Date().getTime() + 3600000),
+  destination: null,
+  isFavorite: false,
+  offers: [],
+  type: 'Flight'
+};
+
+export{filter, UpdateType, UserAction, Mode, FilterType, POINT_EMPTY};

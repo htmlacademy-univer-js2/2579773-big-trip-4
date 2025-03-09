@@ -3,6 +3,7 @@ import EventListView from '../view/event-list-view.js';
 import EventListViewEmpty from '../view/event-list-view-empty.js';
 import PointPresenter from './point-presenter.js';
 import TripInfoView from '../view/trip-info-view.js';
+import NewPointPresenter from './new-point-presenter.js';
 
 import {render, remove, RenderPosition} from '../framework/render.js';
 import {UpdateType, UserAction, FilterType} from '../const.js';
@@ -22,15 +23,28 @@ export default class BoardPresenter {
   #eventListComponent = new EventListView();
 
   #pointPresenters = new Map();
+  #newPointPresenter = null;
+  #newPointButtonPresenter = null;
   #filterType = FilterType.EVERYTHING;
 
-  constructor({container, pointModel, destinationModel, offerModel, filterModel, tripInfoContainer}) {
+  isCreating = false;
+
+  constructor({container, pointModel, destinationModel, offerModel, filterModel, tripInfoContainer, newPointButtonPresenter}) {
     this.#container = container;
     this.#pointModel = pointModel;
     this.#destinationModel = destinationModel;
     this.#offerModel = offerModel;
     this.#filterModel = filterModel;
     this.#tripInfoContainer = tripInfoContainer;
+    this.#newPointButtonPresenter = newPointButtonPresenter;
+
+    this.#newPointPresenter = new NewPointPresenter({
+      container: this.#eventListComponent.element,
+      destinationModel: this.#destinationModel,
+      offerModel: this.#offerModel,
+      onDataChange: this.#handleViewAction,
+      onDestroy: this.#newPointDestroyHandle
+    });
 
     this.#pointModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
@@ -57,7 +71,7 @@ export default class BoardPresenter {
 
     this.#renderTripInfo();
     this.#renderSort();
-    this.#renderointsContainer();
+    this.#renderPointsContainer();
     this.#renderPoints();
   }
 
@@ -70,10 +84,10 @@ export default class BoardPresenter {
   }
 
   #renderSort = () => {
-    render(this.#sortComponent, this.#container);
+    render(this.#sortComponent, this.#container, RenderPosition.AFTERBEGIN);
   };
 
-  #renderointsContainer = () => {
+  #renderPointsContainer = () => {
     render(this.#eventListComponent, this.#container);
   };
 
@@ -82,7 +96,7 @@ export default class BoardPresenter {
       pointListContainer: this.#eventListComponent.element,
       destinationModel: this.#destinationModel,
       offerModel: this.#offerModel,
-      onDataChange: this.#handelViewAction,
+      onDataChange: this.#handleViewAction,
       onModeChange: this.#handleModeChange
     });
 
@@ -115,6 +129,7 @@ export default class BoardPresenter {
   #clearPoints = () => {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
+    this.#newPointPresenter.destroy();
 
     if (this.#noPointComponent) {
       remove(this.#noPointComponent);
@@ -127,7 +142,7 @@ export default class BoardPresenter {
     }
   };
 
-  #handelViewAction = (actionType, updateType, update) => {
+  #handleViewAction = (actionType, updateType, update) => {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this.#pointModel.updatePoint(updateType, update);
@@ -154,5 +169,22 @@ export default class BoardPresenter {
 
   #handleModeChange = () => {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
+    this.#newPointPresenter.destroy();
+  };
+
+  newPointButtonClickHandler = () => {
+    this.isCreating = true;
+    this.#filterModel.setFilter(UpdateType.MINOR, FilterType.EVERYTHING);
+    this.#newPointButtonPresenter.disableButton();
+    this.#newPointPresenter.init();
+  };
+
+  #newPointDestroyHandle = ({isCanceled}) => {
+    this.isCreating = false;
+    this.#newPointButtonPresenter.enableButton();
+    if (this.points.length === 0 && isCanceled) {
+      this.#clearPoints();
+      this.#renderBoard();
+    }
   };
 }
