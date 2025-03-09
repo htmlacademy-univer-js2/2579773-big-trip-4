@@ -14,4 +14,30 @@ const filter = {
   [FilterType.PAST]: (points) => points.filter((point) => isPointPast(point))
 };
 
-export{filter};
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
+
+const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT'
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+};
+
+const POINT_EMPTY = {
+  basePrice: 0,
+  dateFrom: new Date(),
+  dateTo:  new Date(new Date().getTime() + 3600000),
+  destination: null,
+  isFavorite: false,
+  offers: [],
+  type: 'Flight'
+};
+
+export{filter, UpdateType, UserAction, Mode, FilterType, POINT_EMPTY};

@@ -75,7 +75,7 @@ function createPointEditTemplate({state}) {
             <label class="event__label" for="event-price-1">
               &euro;
             </label>
-            <input class="event__input event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice || ''}">
+            <input class="event__input event__input--price" id="event-price-1" type="number" name="event-price" value="${basePrice || ''}">
           </div>
           <button class="event__save-btn btn btn--blue" type="submit">Save</button>
           <button class="event__reset-btn" type="reset">Delete</button>
@@ -171,7 +171,20 @@ export default class PointEditView extends AbstractStatefulView {
     this.element.querySelector('.event__available-offers').addEventListener('change', this.#offersHandler);
     this.element.querySelector('.event__input--price').addEventListener('change', this.#priceHandler);
     this.#setDatepickers();
+    this.#checkDestination();
   }
+
+  #checkDestination = () => {
+    const destinationValue = this.element.querySelector('.event__input--destination').value;
+    const validDestination = this.#destinations.find((dest) => dest.name.toLowerCase() === destinationValue.toLowerCase());
+    const saveButton = this.element.querySelector('.event__save-btn');
+
+    if (validDestination) {
+      saveButton.disabled = false;
+    } else {
+      saveButton.disabled = true;
+    }
+  };
 
   #resetHandler = (evt) => {
     evt.preventDefault();
@@ -185,7 +198,7 @@ export default class PointEditView extends AbstractStatefulView {
 
   #deleteHandler = (evt) => {
     evt.preventDefault();
-    this.#onDeleteClick();
+    this.#onDeleteClick(PointEditView.parseStateToPoint(this._state));
   };
 
   #eventTypeHandler = (evt) => {
@@ -199,12 +212,21 @@ export default class PointEditView extends AbstractStatefulView {
   };
 
   #eventDestinationHandler = (evt) => {
-    this.updateElement({
-      point: {
-        ...this._state.point,
-        destination: this.#destinations.find((dest) => dest.name === evt.target.value)
-      },
-    });
+    const destinationValue = evt.target.value;
+    const validDestination = this.#destinations.find((dest) => dest.name.toLowerCase() === destinationValue.toLowerCase());
+    const saveButton = this.element.querySelector('.event__save-btn');
+
+    if (validDestination) {
+      this.updateElement({
+        point: {
+          ...this._state.point,
+          destination: validDestination
+        },
+      });
+      saveButton.disabled = false;
+    } else {
+      saveButton.disabled = true;
+    }
   };
 
   #offersHandler = () => {
@@ -235,7 +257,7 @@ export default class PointEditView extends AbstractStatefulView {
     this._setState({
       point: {
         ...this._state.point,
-        dateStart: userDate
+        dateFrom: userDate
       }
     });
     this.#datepickerStart.set('minDate',this._state.point.dateStart);
@@ -245,7 +267,7 @@ export default class PointEditView extends AbstractStatefulView {
     this._setState({
       point: {
         ...this._state.point,
-        dateEnd: userDate
+        dateTo: userDate
       }
     });
     this.#datepickerStart.set('maxDate',this._state.point.dateEnd);

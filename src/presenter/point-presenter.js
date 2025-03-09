@@ -2,11 +2,8 @@ import PointView from '../view/point-view.js';
 import PointEditView from '../view/point-edit-view.js';
 
 import {render, replace, remove} from '../framework/render.js';
-
-const Mode = {
-  DEFAULT: 'DEFAULT',
-  EDITING: 'EDITING',
-};
+import {UpdateType, UserAction} from '../const.js';
+import {Mode} from '../const.js';
 
 export default class PointPresenter {
   #destinationModel = null;
@@ -88,16 +85,7 @@ export default class PointPresenter {
   };
 
   #replaceFormToPoint = () => {
-    const updatedPointComponent = new PointView({
-      point: this.#point,
-      pointDestination: this.#destinationModel.getByID(this.#point.destination.id),
-      pointOffers: this.#point.offers || [],
-      onEditClick: this.#pointEditClickHandler,
-      onFavoriteClick: this.#favoriteClickHandler,
-    });
-
-    replace(updatedPointComponent, this.#pointEditComponent);
-    this.#pointComponent = updatedPointComponent;
+    replace(this.#pointComponent, this.#pointEditComponent);
     this.#mode = Mode.DEFAULT;
   };
 
@@ -121,20 +109,31 @@ export default class PointPresenter {
     document.removeEventListener('keydown', this.#escKeyHandler);
   };
 
-  #submitClickHandler = (point) => {
+  #submitClickHandler = (update) => {
     this.#replaceFormToPoint();
     document.removeEventListener('keydown', this.#escKeyHandler);
-    this.#handleDataChange(point);
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      update,
+    );
   };
 
-  #deleteClickHandler = () => {
-    this.#pointComponent.element.remove();
-    this.#pointEditComponent.element.remove();
+  #deleteClickHandler = (point) => {
+    this.#handleDataChange(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      point,
+    );
     document.removeEventListener('keydown', this.#escKeyHandler);
   };
 
   #favoriteClickHandler = () => {
-    this.#handleDataChange({...this.#point, isFavorite: !this.#point.isFavorite});
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.PATCH,
+      {...this.#point, isFavorite: !this.#point.isFavorite}
+    );
   };
 }
 
