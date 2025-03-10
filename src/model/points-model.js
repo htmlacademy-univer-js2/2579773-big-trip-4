@@ -7,11 +7,25 @@ export default class PointModel extends Observable {
   constructor(service) {
     super();
     this.#service = service;
-    this.#points = this.#service.getPoints() || [];
+    // this.#points = this.#service.getPoints() || [];
+    // console.log(this.#service.points);
+
+    // this.#service.points.then((points) => {
+    //   console.log(points.map(this.#adaptToClient));
+    // });
   }
 
   get points() {
     return this.#points || [];
+  }
+
+  async init() {
+    try {
+      const points = await this.#service.points;
+      this.#points = points.map(this.#adaptToClient);
+    } catch(err) {
+      this.#points = [];
+    }
   }
 
   updatePoint(updateType, update) {
@@ -52,5 +66,22 @@ export default class PointModel extends Observable {
     ];
 
     this._notify(updateType);
+  }
+
+  #adaptToClient(point) {
+    const adaptedPoint = {
+      ...point,
+      basePrice: point['base_price'],
+      dateFrom: point['date_from'],
+      dateTo: point['date_to'],
+      isFavorite: point['is_favorite'],
+    };
+
+    delete adaptedPoint['base_price'];
+    delete adaptedPoint['date_from'];
+    delete adaptedPoint['date_to'];
+    delete adaptedPoint['is_favorite'];
+
+    return adaptedPoint;
   }
 }
