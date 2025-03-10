@@ -1,7 +1,7 @@
 import AbstractView from '../framework/view/abstract-view';
 import {FilterType} from '../const';
 
-const NoTasksTextType = {
+const NoPointTextType = {
   [FilterType.EVERYTHING]: 'Click New Event to create your first point',
   [FilterType.PAST]: 'There are no past events now',
   [FilterType.PRESENT]: 'There are no present events now',
@@ -9,11 +9,11 @@ const NoTasksTextType = {
 };
 
 function createEventListEmptyTemplate(filterType) {
-  const noTaskTextValue = NoTasksTextType[filterType];
+  const noPointTextValue = NoPointTextType[filterType];
   return `
     <section class="trip-events">
       <h2 class="visually-hidden">Trip events</h2>
-      <p class="trip-events__msg">${noTaskTextValue}</p>
+      <p class="trip-events__msg">${noPointTextValue}</p>
     </section>
   `;
 }

@@ -28,6 +28,7 @@ const UserAction = {
 const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
+  INIT: 'INIT'
 };
 
 const POINT_EMPTY = {
