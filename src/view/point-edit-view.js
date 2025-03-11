@@ -5,7 +5,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 
 function createPointEditTemplate({state}) {
   const {point, offers, destinations} = state;
-  const { basePrice, dateFrom, dateTo, isFavorite, type } = point;
+  const {basePrice, dateFrom, dateTo, isFavorite, type} = point;
 
   const eventTypes = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
   const eventTypeOptions = eventTypes.map((eventType) => {
@@ -20,7 +20,7 @@ function createPointEditTemplate({state}) {
 
   const filteredOffers = offers.find((offer) => offer.type.toLowerCase() === type.toLowerCase())?.offers || [];
   const offerSelectors = filteredOffers.map((offer) => {
-    const isChecked = point.offers.some((offerItem) => offerItem.id === offer.id) ? 'checked' : '';
+    const isChecked = point.offers.some((offerItem) => offerItem === offer.id) ? 'checked' : '';
     return `
       <div class="event__offer-selector">
         <input class="event__offer-checkbox visually-hidden" id="event-offer-${point.type.toLowerCase()}-${offer.id}" type="checkbox" name="event-offer-${point.type.toLowerCase()}" data-offer-id="${offer.id}"  ${isChecked}>
@@ -233,13 +233,11 @@ export default class PointEditView extends AbstractStatefulView {
   #offersHandler = () => {
     const checkedBoxes = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
     const selectedOfferId = checkedBoxes.map((element) => (element.dataset.offerId));
-    const availableOffers = this.#offers.find((offer) => offer.type.toLowerCase() === this._state.point.type.toLowerCase())?.offers || [];
-    const selectedOffers = availableOffers.filter((offer) => selectedOfferId.includes(offer.id));
 
     this._setState({
       point: {
         ...this._state.point,
-        offers: selectedOffers
+        offers: selectedOfferId
       }
     });
   };

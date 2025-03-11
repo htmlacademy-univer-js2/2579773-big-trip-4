@@ -27,7 +27,7 @@ export default class NewPointPresenter {
     this.#pointNewComponent = new PointCreateView ({
       point: POINT_EMPTY,
       destinations: this.#destinationModel.get(),
-      offers: this.#offerModel.get(),
+      offers: this.#offerModel.get() || [],
       onResetClick: this.#resetClickHandle,
       onFormSubmit: this.#formSubmitHandle,
     });
