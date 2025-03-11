@@ -28,6 +28,7 @@ const UserAction = {
 const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
+  INIT: 'INIT'
 };
 
 const POINT_EMPTY = {
@@ -40,4 +41,11 @@ const POINT_EMPTY = {
   type: 'Flight'
 };
 
-export{filter, UpdateType, UserAction, Mode, FilterType, POINT_EMPTY};
+const Method = {
+  POST: 'POST',
+  GET: 'GET',
+  DELETE: 'DELETE',
+  PUT: 'PUT'
+};
+
+export{filter, UpdateType, UserAction, Mode, FilterType, POINT_EMPTY, Method};

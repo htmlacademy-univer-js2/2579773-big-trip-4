@@ -4,6 +4,7 @@ import EventListViewEmpty from '../view/event-list-view-empty.js';
 import PointPresenter from './point-presenter.js';
 import TripInfoView from '../view/trip-info-view.js';
 import NewPointPresenter from './new-point-presenter.js';
+import LoadingView from '../view/loading-view.js';
 
 import {render, remove, RenderPosition} from '../framework/render.js';
 import {UpdateType, UserAction, FilterType} from '../const.js';
@@ -18,6 +19,7 @@ export default class BoardPresenter {
   #noPointComponent = null;
   #tripInfoComponent = null;
   #tripInfoContainer = null;
+  #loadingComponent = new LoadingView();
 
   #sortComponent = new SortView();
   #eventListComponent = new EventListView();
@@ -28,6 +30,7 @@ export default class BoardPresenter {
   #filterType = FilterType.EVERYTHING;
 
   isCreating = false;
+  #isLoading = true;
 
   constructor({container, pointModel, destinationModel, offerModel, filterModel, tripInfoContainer, newPointButtonPresenter}) {
     this.#container = container;
@@ -64,6 +67,12 @@ export default class BoardPresenter {
 
   #renderBoard() {
     this.#clearPoints();
+
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
+
     if (this.points.length === 0) {
       this.#renderNoPoint();
       return;
@@ -110,6 +119,10 @@ export default class BoardPresenter {
     });
   };
 
+  #renderLoading() {
+    render(this.#loadingComponent, this.#container, RenderPosition.AFTERBEGIN);
+  }
+
   #renderNoPoint = () => {
     if (this.#sortComponent) {
       remove(this.#sortComponent);
@@ -140,6 +153,7 @@ export default class BoardPresenter {
       remove(this.#tripInfoComponent);
       this.#tripInfoComponent = null;
     }
+    remove(this.#loadingComponent);
   };
 
   #handleViewAction = (actionType, updateType, update) => {
@@ -164,6 +178,12 @@ export default class BoardPresenter {
         break;
       case UpdateType.PATCH:
         this.#pointPresenters.get(data.id).init(data);
+        break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderBoard();
+        break;
     }
   };
 
