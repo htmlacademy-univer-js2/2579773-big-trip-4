@@ -44,7 +44,8 @@ const POINT_EMPTY = {
 const Method = {
   POST: 'POST',
   GET: 'GET',
-  DELETE: 'DELETE'
+  DELETE: 'DELETE',
+  PUT: 'PUT'
 };
 
 export{filter, UpdateType, UserAction, Mode, FilterType, POINT_EMPTY, Method};

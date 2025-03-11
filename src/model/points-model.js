@@ -1,5 +1,5 @@
 import Observable from '../framework/observable';
-import { UpdateType } from '../const';
+import {UpdateType} from '../const';
 
 export default class PointModel extends Observable {
   #service = null;
@@ -8,12 +8,6 @@ export default class PointModel extends Observable {
   constructor(service) {
     super();
     this.#service = service;
-    // this.#points = this.#service.getPoints() || [];
-    // console.log(this.#service.points);
-
-    // this.#service.points.then((points) => {
-    //   console.log(points.map(this.#adaptToClient));
-    // });
   }
 
   get points() {
@@ -22,7 +16,7 @@ export default class PointModel extends Observable {
 
   async init() {
     try {
-      const points = await this.#service.points;
+      const points = await this.#service.getPoints();
       this.#points = points.map(this.#adaptToClient);
     } catch(err) {
       this.#points = [];
@@ -74,7 +68,7 @@ export default class PointModel extends Observable {
     const adaptedPoint = {
       ...point,
       basePrice: point['base_price'],
-      dateFrom: point['date_from'],
+      dateFrom: point['date_from'] !== null ? new Date(point['date_from']) : point['date_from'],
       dateTo: point['date_to'],
       isFavorite: point['is_favorite'],
     };

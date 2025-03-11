@@ -26,7 +26,7 @@ export default class FilterPresenter {
     }));
   }
 
-  init () {
+  init() {
     const filters = this.filters;
     const prevFilterComponent = this.#filterComponent;
 

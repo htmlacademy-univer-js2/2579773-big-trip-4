@@ -5,7 +5,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 
 function createPointEditTemplate({state}) {
   const {point, offers, destinations} = state;
-  const { basePrice, dateFrom, dateTo, destination, isFavorite, type } = point;
+  const { basePrice, dateFrom, dateTo, isFavorite, type } = point;
 
   const eventTypes = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
   const eventTypeOptions = eventTypes.map((eventType) => {
@@ -36,7 +36,8 @@ function createPointEditTemplate({state}) {
   const destinationOptions = destinations.map((dest) =>`
     <option value="${dest.name}"></option>`).join('');
 
-  const photoImages = destination.pictures.map((photo) =>
+  const destinationItem = destinations.find((dest) => dest.id === point.destination);
+  const photoImages = (destinationItem?.pictures || []).map((photo) =>
     `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`
   ).join('');
 
@@ -61,7 +62,7 @@ function createPointEditTemplate({state}) {
             <label class="event__label event__type-output" for="event-destination-1">
               ${type}
             </label>
-            <input class="event__input event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
+            <input class="event__input event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationItem ? destinationItem.name : ''}" list="destination-list-1">
             <datalist id="destination-list-1">
               ${destinationOptions}
             </datalist>
@@ -98,7 +99,7 @@ function createPointEditTemplate({state}) {
           </section>
           <section class="event__section event__section--destination">
             <h3 class="event__section-title event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">${destination.description}</p>
+            <p class="event__destination-description">${destinationItem.description}</p>
           </section>
           <div class="event__photos-container">
               <div class="event__photos-tape">
@@ -220,7 +221,7 @@ export default class PointEditView extends AbstractStatefulView {
       this.updateElement({
         point: {
           ...this._state.point,
-          destination: validDestination
+          destination: validDestination.id
         },
       });
       saveButton.disabled = false;

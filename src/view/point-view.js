@@ -3,10 +3,10 @@ import {formatStringToDateTime, formatStringToShortDate, formatStringToTime} fro
 import dayjs from 'dayjs';
 
 function createPointTemplate({point, pointDestination, pointOffers}) {
-  const { basePrice, dateFrom, dateTo, isFavorite, type } = point;
+  const { basePrice, dateFrom, dateTo, isFavorite, type, offers } = point;
 
-  const offerItems = pointOffers?.length > 0 ?
-    pointOffers.map((offer) => `
+  const filteredOffers = pointOffers.filter((offer) => offers.includes(offer.id));
+  const offerItems = filteredOffers?.length > 0 ? filteredOffers.map((offer) => `
     <li class="event__offer">
       <span class="event__offer-title">${offer.title}</span>
       &plus;&euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
@@ -57,7 +57,7 @@ export default class PointView extends AbstractView {
   #onEditClick = null;
   #onFavoriteClick = null;
 
-  constructor({point, pointDestination, pointOffers, onEditClick, onFavoriteClick}) {
+  constructor({point, pointDestination, pointOffers = [], onEditClick, onFavoriteClick}) {
     super();
     this.#point = point;
     this.#pointDestination = pointDestination;

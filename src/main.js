@@ -49,5 +49,12 @@ newPointButtonPresenter.init({
 });
 
 filterPresenter.init();
-boardPresenter.init();
-pointModel.init();
+
+async function initApp() {
+  await destinationModel.init();
+  await offerModel.init();
+  await pointModel.init();
+  boardPresenter.init();
+}
+
+initApp();

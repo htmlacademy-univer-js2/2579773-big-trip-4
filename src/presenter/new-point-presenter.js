@@ -19,7 +19,7 @@ export default class NewPointPresenter {
     this.#handleDestroy = onDestroy;
   }
 
-  init () {
+  init() {
     if (this.#pointNewComponent !== null) {
       return;
     }
