@@ -49,8 +49,8 @@ export default class PointApiService extends ApiService{
     const adaptedPoint = {
       ...point,
       ['base_price']: point.basePrice,
-      ['date_from']: point.dateFrom instanceof Date ? point.dateFrom.toISOSString() : null,
-      ['date_to']: point.dateTo instanceof Date ? point.dateTo.toISOSString() : null,
+      ['date_from']: point.dateFrom,
+      ['date_to']: point.dateTo,
       ['is_favorite']: point.isFavorite,
     };
 
